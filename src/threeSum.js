@@ -14,7 +14,8 @@ var threeSum = function(nums) {
   var result = [];
   for (var i=0,len=nums.length;i<len;i++){
     temp = -nums[i];
-    tempArr = nums;
+    //一定要复制，array不是基本类型值，会按引用赋值
+    tempArr = nums.slice(0);
     tempArr.splice(i,1);
     twoSum(temp,tempArr,result)
   }
@@ -22,17 +23,20 @@ var threeSum = function(nums) {
 };
 
 var twoSum = function(num,arr,result){
-  var i ,
-    j = arr.length,
+  var i = 0  ,
+    j = arr.length-1,
     tempResult=[];
-  for(i=0;i<j;i++){
-    if ((arr[i]+arr[j])>num){
-      j--
-    }else if((arr[i]+arr[j])<num){
-      i++
-    }else{
-      tempResult.push(arr[i],arr[j]);
-        result.push(tempResult)
+    var tempsum = 0;
+  while (i<j){
+    tempsum = arr[i]+arr[j]
+    if ( tempsum > parseInt(num)){
+      j--;
+    }else if( tempsum < parseInt(num)){
+      i++;
+    }else if( tempsum  == parseInt(num)){
+      tempResult.push(arr[i],arr[j],-num);
+        result.push(tempResult);
+        break;
     }
   }
 };
