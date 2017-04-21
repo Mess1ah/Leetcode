@@ -6,39 +6,49 @@
  * @return {number[][]}
  */
 var threeSum = function(nums) {
-  nums = nums.sort(function(num1,num2){
-    return num1-num2
-  })
-  var temp = 0;
-  var tempArr = [];
-  var result = [];
-  for (var i=0,len=nums.length;i<len;i++){
-    temp = -nums[i];
-    //一定要复制，array不是基本类型值，会按引用赋值
-    tempArr = nums.slice(0);
-    tempArr.splice(i,1);
-    twoSum(temp,tempArr,result)
-  }
-  return result;
-};
+  var hash = {}
+    , len = nums.length;
 
-var twoSum = function(num,arr,result){
-  var i = 0  ,
-    j = arr.length-1,
-    tempResult=[];
-    var tempsum = 0;
-  while (i<j){
-    tempsum = arr[i]+arr[j]
-    if ( tempsum > parseInt(num)){
-      j--;
-    }else if( tempsum < parseInt(num)){
-      i++;
-    }else if( tempsum  == parseInt(num)){
-      tempResult.push(arr[i],arr[j],-num);
-        result.push(tempResult);
-        break;
-    }
+  nums.sort(function(a, b) {
+    return a - b;
+  });
+
+  for (var i = 0; i < len; i++) {
+    var item = nums[i];
+    if (!hash[item])
+      hash[item] = 1;
+    else
+      hash[item]++;
   }
+
+  var ans = [];
+  var hashSet = {};
+
+  for (var i = 0; i < len; i++)
+    for (var j = i + 1; j < len; j++) {
+      var a = nums[i]
+        , b = nums[j]
+        , c = 0 - a - b;
+
+      if (c < b)
+        break;
+
+      if (hashSet[a + ',' + b + ',' + c])
+        continue;
+
+      hash[a]--;
+      hash[b]--;
+
+      if (hash[c]) {
+        hashSet[a + ',' + b + ',' + c] = true;
+        ans.push([a, b, c]);
+      }
+
+      hash[a]++;
+      hash[b]++;
+    }
+
+  return ans;
 };
 
 
